@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Nest</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+
+        .task-card {
+            transition: 0.3s ease-in-out;
+            border-left: 5px solid #007bff;
+            background: white;
+        }
+
+        .task-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-strikethrough {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .btn-toggle {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-toggle:hover {
+            background: #495057;
+        }
+
+        .btn-delete:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Logout Button -->
+<a th:href="@{/logout}" class="btn btn-danger logout-btn">
+    <i class="fas fa-sign-out-alt"></i> Logout
+</a>
+
+<div class="container">
+    <h1 class="text-center text-primary fw-bold">TaskNest Application</h1>
+
+    <!-- Task Input Form -->
+    <form action="/tasks" method="post" class="row mt-4">
+        <div class="col-md-6">
+            <input class="form-control form-control-lg" type="text" name="title" placeholder="Add a new task..." required>
+        </div>
+
+        <!-- Category Selection -->
+        <div class="col-md-4">
+            <select class="form-select form-select-lg" name="categoryName">
+                <option value="">Select Category</option>
+                <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+            </select>
+        </div>
+
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus"></i> Add
+            </button>
+        </div>
+    </form>
+
+    <!-- Category Filter -->
+    <div class="mt-4">
+        <label for="categoryFilter" class="fw-bold">Filter by Category:</label>
+        <select id="categoryFilter" class="form-select" onchange="filterTasks(this.value)">
+            <option value="">All Categories</option>
+            <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+        </select>
+    </div>
+
+    <!-- Task List -->
+    <div class="mt-4">
+        <th:block th:each="task : ${tasks}">
+            <div class="card task-card mb-2 p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span th:classappend="${task.completed}?'text-strikethrough'" th:text="${task.title}" class="fw-bold">Task Title</span>
+
+                    <!-- Show Category Name -->
+                    <span class="badge bg-secondary" th:text="${task.category != null ? task.category.name : 'Uncategorized'}"></span>
+
+                    <div>
+                        <a th:href="@{/{id}/toggle(id=${task.id})}" class="btn btn-toggle btn-sm me-2">
+                            <i class="fas fa-sync-alt"></i> Toggle
+                        </a>
+
+                        <a th:href="@{/{id}/delete(id=${task.id})}" class="btn btn-outline-danger btn-sm btn-delete">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+</div>
+
+<!-- JavaScript for Filtering Tasks -->
+<script>
+    function filterTasks(category) {
+        if (category === "") {
+            window.location.href = "/tasks";
+        } else {
+            window.location.href = "/tasks/category/" + category;
+        }
+    }
+</script>
+
+</body>
+</html>
