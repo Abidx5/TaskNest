@@ -36,8 +36,8 @@ public class AuthController {
             return "register";
         }
 
-        userService.registerUser(user); // Register the user
-        return "redirect:/login"; // Redirect to login page after successful registration
+        userService.registerUser(user); 
+        return "redirect:/login"; 
     }
 
     @GetMapping("/login")
