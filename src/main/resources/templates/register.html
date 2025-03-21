@@ -26,6 +26,9 @@
     <a th:href="@{/}" class="brand-title d-block text-center mb-4">TaskNest</a>
     <h2 class="text-center text-primary mb-4">Register to Task Nest</h2>
     <form th:action="@{/register}" th:object="${user}" method="post">
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <p th:text="${error}"></p>
+        </div>
         <div class="mb-3">
             <label class="form-label">Username</label>
             <input type="text" th:field="*{username}" class="form-control" placeholder="Enter username" required />

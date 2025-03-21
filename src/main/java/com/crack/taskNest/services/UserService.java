@@ -15,12 +15,19 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
+    // Check if email exists
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    // Check if username exists
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    // Register user after encoding password
     public void registerUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // Encode password
+        userRepository.save(user);  // Save the user to the database
     }
 }

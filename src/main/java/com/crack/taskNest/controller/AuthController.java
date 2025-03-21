@@ -25,18 +25,23 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute @Valid User user, Model model) {
-        if (userService.existsByEmail(user.getEmail())) { // Check for existing email
+        // Check for existing email and username
+        if (userService.existsByEmail(user.getEmail())) {
             model.addAttribute("error", "Email already exists!");
             return "register";
         }
-        userService.registerUser(user);
-        return "redirect:/login";
+
+        if (userService.existsByUsername(user.getUsername())) {
+            model.addAttribute("error", "Username already exists!");
+            return "register";
+        }
+
+        userService.registerUser(user); // Register the user
+        return "redirect:/login"; // Redirect to login page after successful registration
     }
-
-
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "login";
+        return "login"; // Return the login view
     }
 }

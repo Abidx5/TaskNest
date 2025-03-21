@@ -10,13 +10,17 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
+    @Column(unique = true)
     private String username;
 
     @NotBlank
@@ -24,6 +28,7 @@ public class User {
 
     @Email
     @NotBlank
+    @Column(unique = true)
     private String email;
 
 
